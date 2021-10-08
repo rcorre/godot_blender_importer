@@ -1,0 +1,5 @@
+.import/
+build/
+*.kra
+*.blend1
+*~

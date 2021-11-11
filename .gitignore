@@ -1,5 +1,3 @@
 .import/
-build/
-*.kra
+*.blend
 *.blend1
-*~

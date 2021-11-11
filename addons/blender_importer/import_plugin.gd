@@ -1,46 +1,17 @@
-extends EditorImportPlugin
+extends EditorSceneImporter
 
-enum Presets { DEFAULT }
-
-func get_importer_name() -> String:
-	return "blender.importer"
-
-func get_visible_name() -> String:
-	return "Blender Importer"
-
-func get_recognized_extensions() -> Array:
+func _get_extensions() -> Array:
 	return ["blend"]
 
-func get_save_extension() -> String:
-	return "tscn"
+func _get_import_flags() -> int:
+	return IMPORT_SCENE
 
-func get_resource_type():
-    return "PackedScene"
+func _import_animation(path: String, flags: int, bake_fs: int) -> Animation:
+	return null
 
-func get_preset_count() -> int:
-	return Presets.size()
-
-func get_preset_name(preset: int) -> String:
-	match preset:
-		Presets.DEFAULT:
-			return "Default"
-		_:
-			return "Unknown"
-
-func get_import_options(preset: int) -> Array:
-	match preset:
-		Presets.DEFAULT:
-			return []
-		_:
-			return []
-
-func get_option_visibility(_option: String, _options: Dictionary) -> bool:
-	return true
-
-func import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array, gen_files: Array):
-	var blend_path := ProjectSettings.globalize_path(source_file)
-	var tmp := ProjectSettings.globalize_path(save_path + ".glb")
-	gen_files.push_back(tmp)
+func _import_scene(path: String, flags: int, bake_fs: int) -> Node:
+	var blend_path := ProjectSettings.globalize_path(path)
+	var tmp := blend_path + ".glb"
 	var cmdline := [
 		blend_path,
 		"-b",
@@ -52,12 +23,6 @@ func import(source_file: String, save_path: String, options: Dictionary, platfor
 
 	print("Importing ", tmp)
 	var importer := EditorSceneImporter.new()
-	var node := importer.import_scene_from_other_importer(tmp, 1, 30)
-	print("node: ", node)
-	var scene := PackedScene.new()
-	scene.pack(node)
-	var out_path := "%s.%s" % [save_path, get_save_extension()]
-	print("Saving ", out_path)
-	var ok := ResourceSaver.save(out_path, scene)
-	print("ok: ", ok)
-	return ok
+	var node := importer.import_scene_from_other_importer(tmp, flags, bake_fs)
+	Directory.new().remove(tmp)
+	return node

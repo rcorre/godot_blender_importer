@@ -25,8 +25,7 @@ func _import_scene(path: String, flags: int, bake_fs: int) -> Node:
 		return null
 
 	print("Importing ", tmp)
-	var importer := EditorSceneImporter.new()
-	var node := importer.import_scene_from_other_importer(tmp, flags, bake_fs)
+	var node := import_scene_from_other_importer(tmp, flags, bake_fs, 0)
 	err = Directory.new().remove(tmp)
 	if err != 0:
 		push_error("Failed to remove temp file '%s', error: %d" % [tmp, err])

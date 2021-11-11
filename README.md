@@ -2,6 +2,7 @@
 
 This is a plugin for Godot 3.4 to directly import [blender](https://www.blender.org/) source files without needing to (manually) export to an intermediate format.
 Just save a `.blend` file, and open it as a scene in Godot!
+The `blender` executable must be on your `PATH`.
 
 ## Pros:
 

@@ -19,10 +19,15 @@ func _import_scene(path: String, flags: int, bake_fs: int) -> Node:
 		"import bpy; bpy.ops.export_scene.gltf(filepath='%s')" % tmp,
 	]
 	print("Running ", cmdline)
-	OS.execute("blender", cmdline)
+	var err := OS.execute("blender", cmdline)
+	if err != 0:
+		push_error("Command `%s` failed with code: %d" % [cmdline, err])
+		return null
 
 	print("Importing ", tmp)
 	var importer := EditorSceneImporter.new()
 	var node := importer.import_scene_from_other_importer(tmp, flags, bake_fs)
-	Directory.new().remove(tmp)
+	err = Directory.new().remove(tmp)
+	if err != 0:
+		push_error("Failed to remove temp file '%s', error: %d" % [tmp, err])
 	return node

@@ -1,3 +1,8 @@
+# Deprecated
+
+See https://github.com/V-Sekai/godot-blender instead. These somehow both released at the same time.
+Also note that this may be a feature built-in to Godot4: https://github.com/godotengine/godot/pull/54886#pullrequestreview-805381255.
+
 # Godot Blender Importer
 
 This is a plugin for Godot 3.4 to directly import [blender](https://www.blender.org/) source files without needing to (manually) export to an intermediate format.
